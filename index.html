@@ -12,6 +12,21 @@
             background: #f7f3e8;
             color: #333;
         }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resolutor de Sudoku</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #d1d5db;
+      --block: #9ca3af;
+      --error: #dc2626;
+    }
 
         header {
             background: linear-gradient(135deg, #b30000, #ff5252);
@@ -20,16 +35,166 @@
             padding: 40px 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+    * { box-sizing: border-box; }
 
         header h1 {
             font-size: 3rem;
             margin: 0;
         }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 620px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    p {
+      margin-top: 0;
+      text-align: center;
+      color: #4b5563;
+    }
+
+    .sudoku-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 0;
+      border: 2px solid var(--block);
+      width: min(100%, 500px);
+      margin: 16px auto;
+      aspect-ratio: 1/1;
+    }
+
+    .cell {
+      border: 1px solid var(--border);
+      text-align: center;
+      font-size: clamp(16px, 2.5vw, 24px);
+      font-weight: 600;
+      outline: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cell:focus {
+      background: #eff6ff;
+      border-color: var(--primary);
+    }
+
+    .given {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    .solve {
+      color: #0f172a;
+    }
+
+    .right-heavy { border-right: 2px solid var(--block); }
+    .bottom-heavy { border-bottom: 2px solid var(--block); }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-secondary { background: #e5e7eb; color: #111827; }
+
+    .message {
+      text-align: center;
+      margin-top: 12px;
+      min-height: 1.2em;
+      font-weight: 600;
+    }
+
+    .message.error { color: var(--error); }
+    .message.success { color: #15803d; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>Sudoku Solver</h1>
+    <p>Introduce números del 1 al 9 y pulsa <strong>Resolver</strong>.</p>
 
         header p {
             font-size: 1.3rem;
             margin-top: 10px;
+    <section id="grid" class="sudoku-grid" aria-label="Tablero de sudoku"></section>
+
+    <div class="actions">
+      <button class="btn-primary" id="solveBtn" type="button">Resolver</button>
+      <button class="btn-secondary" id="clearBtn" type="button">Limpiar</button>
+      <button class="btn-secondary" id="exampleBtn" type="button">Cargar ejemplo</button>
+    </div>
+
+    <div id="message" class="message" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const gridEl = document.getElementById('grid');
+    const messageEl = document.getElementById('message');
+
+    function createGrid() {
+      gridEl.innerHTML = '';
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.inputMode = 'numeric';
+          input.maxLength = 1;
+          input.className = 'cell';
+          input.dataset.row = row;
+          input.dataset.col = col;
+
+          if (col === 2 || col === 5) input.classList.add('right-heavy');
+          if (row === 2 || row === 5) input.classList.add('bottom-heavy');
+
+          input.addEventListener('input', (event) => {
+            event.target.value = event.target.value.replace(/[^1-9]/g, '');
+            event.target.classList.remove('given', 'solve');
+          });
+
+          gridEl.appendChild(input);
         }
+      }
+    }
 
         .container {
             max-width: 900px;
@@ -38,18 +203,59 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    function getBoard() {
+      const board = [];
+      const cells = [...document.querySelectorAll('.cell')];
+      for (let row = 0; row < 9; row++) {
+        const rowValues = [];
+        for (let col = 0; col < 9; col++) {
+          const cell = cells[row * 9 + col];
+          rowValues.push(cell.value === '' ? 0 : Number(cell.value));
         }
+        board.push(rowValues);
+      }
+      return board;
+    }
 
         h2 {
             color: #b30000;
             border-left: 6px solid #b30000;
             padding-left: 10px;
+    function setBoard(board, highlightGiven = false) {
+      const cells = [...document.querySelectorAll('.cell')];
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          const idx = row * 9 + col;
+          const cell = cells[idx];
+          const value = board[row][col];
+          cell.value = value === 0 ? '' : String(value);
+
+          cell.classList.remove('given', 'solve');
+          if (value !== 0 && highlightGiven) {
+            cell.classList.add('given');
+          }
         }
+      }
+    }
+
+    function isValidMove(board, row, col, num) {
+      for (let i = 0; i < 9; i++) {
+        if (board[row][i] === num) return false;
+        if (board[i][col] === num) return false;
+      }
 
         ul {
             list-style: none;
             padding: 0;
+      const startRow = Math.floor(row / 3) * 3;
+      const startCol = Math.floor(col / 3) * 3;
+      for (let r = startRow; r < startRow + 3; r++) {
+        for (let c = startCol; c < startCol + 3; c++) {
+          if (board[r][c] === num) return false;
         }
+      }
+      return true;
+    }
 
         ul li {
             background: #ffeaea;
@@ -57,7 +263,14 @@
             margin: 8px 0;
             border-radius: 6px;
             border-left: 5px solid #b30000;
+    function findEmpty(board) {
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          if (board[row][col] === 0) return [row, col];
         }
+      }
+      return null;
+    }
 
         .ganador {
             background: #fff7d1;
@@ -65,7 +278,20 @@
             padding: 15px;
             border-radius: 8px;
             font-size: 1.2rem;
+    function solveSudoku(board) {
+      const empty = findEmpty(board);
+      if (!empty) return true;
+
+      const [row, col] = empty;
+      for (let num = 1; num <= 9; num++) {
+        if (isValidMove(board, row, col, num)) {
+          board[row][col] = num;
+          if (solveSudoku(board)) return true;
+          board[row][col] = 0;
         }
+      }
+      return false;
+    }
 
         footer {
             text-align: center;
@@ -73,11 +299,27 @@
             margin-top: 50px;
             background: #b30000;
             color: white;
+    function hasConflicts(board) {
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          const value = board[row][col];
+          if (value === 0) continue;
+          board[row][col] = 0;
+          const valid = isValidMove(board, row, col, value);
+          board[row][col] = value;
+          if (!valid) return true;
         }
     </style>
 </head>
+      }
+      return false;
+    }
 
 <body>
+    function showMessage(text, type = '') {
+      messageEl.textContent = text;
+      messageEl.className = `message ${type}`.trim();
+    }
 
     <!-- SECCIÓN INICIAL -->
     <header>
@@ -119,12 +361,59 @@
                 ⚠️ El ganador se publicará el día del sorteo.
             </div>
         </section>
+    document.getElementById('solveBtn').addEventListener('click', () => {
+      const board = getBoard();
 
     </div>
+      if (hasConflicts(board)) {
+        showMessage('El tablero tiene conflictos. Revisa los números repetidos.', 'error');
+        return;
+      }
+
+      const initial = board.map((r) => [...r]);
+      const solved = solveSudoku(board);
+
+      if (!solved) {
+        showMessage('No existe solución para este Sudoku.', 'error');
+        return;
+      }
+
+      setBoard(board);
+      const cells = [...document.querySelectorAll('.cell')];
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          const idx = row * 9 + col;
+          cells[idx].classList.add(initial[row][col] === 0 ? 'solve' : 'given');
+        }
+      }
+      showMessage('¡Sudoku resuelto!', 'success');
+    });
+
+    document.getElementById('clearBtn').addEventListener('click', () => {
+      setBoard(Array.from({ length: 9 }, () => Array(9).fill(0)));
+      showMessage('Tablero limpiado.');
+    });
 
     <footer>
         © 2025 Panera Navideña — ¡Felices Fiestas! 🎄
     </footer>
+    document.getElementById('exampleBtn').addEventListener('click', () => {
+      const example = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+      ];
+      setBoard(example, true);
+      showMessage('Ejemplo cargado.');
+    });
 
+    createGrid();
+  </script>
 </body>
 </html>
