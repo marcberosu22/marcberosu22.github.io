@@ -1,419 +1,161 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panera Navideña</title>
-
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #f7f3e8;
-            color: #333;
-        }
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resolutor de Sudoku</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web de Marc</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
   <style>
-    :root {
-      color-scheme: light;
-      --bg: #f7f7fb;
-      --card: #ffffff;
-      --text: #1f2937;
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --border: #d1d5db;
-      --block: #9ca3af;
-      --error: #dc2626;
+    /* 1. Submenús en mode fosc */
+    body[data-bs-theme="dark"] .dropdown-menu {
+      background-color: #2c2c2c !important;
+      border-color: #444;
+    }
+    body[data-bs-theme="dark"] .dropdown-item {
+      color: #f8f9fa !important;
+    }
+    body[data-bs-theme="dark"] .dropdown-item:hover,
+    body[data-bs-theme="dark"] .dropdown-item:focus {
+      background-color: #3c3c3c !important;
+      color: #ffffff !important;
     }
 
-        header {
-            background: linear-gradient(135deg, #b30000, #ff5252);
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-    * { box-sizing: border-box; }
-
-        header h1 {
-            font-size: 3rem;
-            margin: 0;
-        }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 620px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
-    }
-
-    h1 {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 1.6rem;
-      text-align: center;
-    }
-
-    p {
-      margin-top: 0;
-      text-align: center;
-      color: #4b5563;
-    }
-
-    .sudoku-grid {
-      display: grid;
-      grid-template-columns: repeat(9, 1fr);
-      gap: 0;
-      border: 2px solid var(--block);
-      width: min(100%, 500px);
-      margin: 16px auto;
-      aspect-ratio: 1/1;
-    }
-
-    .cell {
-      border: 1px solid var(--border);
-      text-align: center;
-      font-size: clamp(16px, 2.5vw, 24px);
-      font-weight: 600;
-      outline: none;
-      width: 100%;
-      height: 100%;
-    }
-
-    .cell:focus {
-      background: #eff6ff;
-      border-color: var(--primary);
-    }
-
-    .given {
-      background: #f3f4f6;
-      color: #111827;
-    }
-
-    .solve {
-      color: #0f172a;
-    }
-
-    .right-heavy { border-right: 2px solid var(--block); }
-    .bottom-heavy { border-bottom: 2px solid var(--block); }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 12px;
-    }
-
-    button {
+    /* 2. Botó mode fosc/clar només icona */
+    #themeToggle {
       border: none;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
+      background: transparent;
+      font-size: 1.3rem;
+      color: inherit;
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: white;
+    /* 3. Hamburguesa blanca en mode fosc */
+    .navbar-toggler {
+      border: none;
+    }
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280,0,0,0.7%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+    body[data-bs-theme="dark"] .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.9%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
 
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { background: #e5e7eb; color: #111827; }
-
-    .message {
-      text-align: center;
-      margin-top: 12px;
-      min-height: 1.2em;
-      font-weight: 600;
+    /* 4. Logo circular i adaptatiu */
+    .logo {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
     }
-
-    .message.error { color: var(--error); }
-    .message.success { color: #15803d; }
+    @media (max-width: 576px) {
+      .logo {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    @media (min-width: 992px) {
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+    }
   </style>
 </head>
-<body>
-  <main class="app">
-    <h1>Sudoku Solver</h1>
-    <p>Introduce números del 1 al 9 y pulsa <strong>Resolver</strong>.</p>
+<body data-bs-theme="light">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top">
+    <div class="container-fluid">
+      <!-- 5. Logo i text -->
+      <a class="navbar-brand d-flex align-items-center" href="https://mberniol.github.io/">
+        <img src="logo.png" alt="Logo" class="logo rounded-circle me-2">
+        <span class="fw-bold">Web de Marc</span>
+      </a>
 
-        header p {
-            font-size: 1.3rem;
-            margin-top: 10px;
-    <section id="grid" class="sudoku-grid" aria-label="Tablero de sudoku"></section>
+      <!-- Botó menú mòbil -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="actions">
-      <button class="btn-primary" id="solveBtn" type="button">Resolver</button>
-      <button class="btn-secondary" id="clearBtn" type="button">Limpiar</button>
-      <button class="btn-secondary" id="exampleBtn" type="button">Cargar ejemplo</button>
+      <!-- Menú -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <!-- Projecte 1 -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="proj1Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-magnifying-glass"></i> Projectes de recerca
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="proj1Dropdown">
+              <li><a class="dropdown-item" href="https://mberniol.github.io/cerca"><i class="fa-solid fa-carrot"></i> Recerca Carbasó</a></li>
+              <li><a class="dropdown-item" href="https://mberniol.github.io/contaminacio"><i class="fa-solid fa-smog"></i> Recerca contaminació i salut respiratòria a Gavà</a></li>
+            </ul>
+          </li>
+          <!-- Projecte 2 -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="proj2Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-ship"></i> Projecte 22 dies en 22 peus
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="proj2Dropdown">
+              <li><a class="dropdown-item" href="https://mberniol.github.io/introduccio"><i class="fa-solid fa-file-lines"></i> Introducció al projecte</a></li>
+              <li><a class="dropdown-item" href="https://mberniol.github.io/vectors"><i class="fa-regular fa-compass"></i> Calculem rumbs amb vectors</a></li>
+              <li><a class="dropdown-item" href="https://mberniol.github.io/distancies"><i class="fa-solid fa-arrows-left-right-to-line"></i> Calculem distàncies amb GPS</a></li>
+            </ul>
+          </li>
+            <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">Projectes de cares</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara1/">Cara 1</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara2/">Cara 2</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara3/">Cara 3</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara4/">Cara 4</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara5/">Cara 5</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara6/">Cara 6</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara7/">Cara 7</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara8/">Cara 8</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara9/">Cara 9</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara10/">Cara 10</a>
+                        <a class="dropdown-item" href="https://mberniol4.github.io/cara11/">Cara 11</a>
+                        <a class="nav-link" href="https://mberniol4.github.io/artperlacara/">Art per la cara 1</a>
+                        <a class="nav-link" href="https://mberniol4.github.io/artperlacara2/">Art per la cara 2</a>
+                        <a class="nav-link" href="https://mberniol4.github.io/artperlacara3/">Art per la cara 3</a>
+
+                    </div>
+                </li>
+        </ul>
+        <!-- Botó mode clar/fosc -->
+        <button id="themeToggle" class="ms-2"><i class="fa-solid fa-moon"></i></button>
+      </div>
     </div>
+  </nav>
 
-    <div id="message" class="message" aria-live="polite"></div>
+  <!-- Contingut -->
+  <main class="container py-5">
+    <h1 class="display-5 fw-bold mb-4">Benvinguts als Projectes</h1>
+    <p class="lead">Aquesta és una web amb menú desplegable, icones Font Awesome, mode clar i fosc, i disseny responsiu per mòbil i ordinador utilitzant Bootstrap 5.3.8. Aquest és el punt de partida per editar tot i fer projectes amb el professor Francesc Pérez.</p>
+  <p class="lead"> Sóc <u>Marc</u> de <b>4tA ESO</b> de l'<a href="https://agora.xtec.cat/ies-pompeu-fabra-martorell/">Institut Pompeu Fabra</a>
+    <p class="lead"> En aquesta web veurem els meus projectes:</p>
+    <ul>
+      <li><b>Projecte 1:</b> Comparar aliments ecològics i convencionals pel que fa el nivell de nutrients: vitamines, minerals, polifenols i altres substàncies beneficioses.</li>
+      <li><b>Projecte 2:</b> 22 dies en 22 peus: és una cursa nàutica on aprenem a sumar vectors, calcular distàncies amb GPS i altres activitats.</li>  
+    </ul>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const gridEl = document.getElementById('grid');
-    const messageEl = document.getElementById('message');
+    // Mode clar/fosc amb canvi d'icona
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = themeToggle.querySelector('i');
 
-    function createGrid() {
-      gridEl.innerHTML = '';
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.inputMode = 'numeric';
-          input.maxLength = 1;
-          input.className = 'cell';
-          input.dataset.row = row;
-          input.dataset.col = col;
-
-          if (col === 2 || col === 5) input.classList.add('right-heavy');
-          if (row === 2 || row === 5) input.classList.add('bottom-heavy');
-
-          input.addEventListener('input', (event) => {
-            event.target.value = event.target.value.replace(/[^1-9]/g, '');
-            event.target.classList.remove('given', 'solve');
-          });
-
-          gridEl.appendChild(input);
-        }
+    themeToggle.addEventListener('click', () => {
+      if (document.body.getAttribute('data-bs-theme') === 'dark') {
+        document.body.setAttribute('data-bs-theme', 'light');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+      } else {
+        document.body.setAttribute('data-bs-theme', 'dark');
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
       }
-    }
-
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    function getBoard() {
-      const board = [];
-      const cells = [...document.querySelectorAll('.cell')];
-      for (let row = 0; row < 9; row++) {
-        const rowValues = [];
-        for (let col = 0; col < 9; col++) {
-          const cell = cells[row * 9 + col];
-          rowValues.push(cell.value === '' ? 0 : Number(cell.value));
-        }
-        board.push(rowValues);
-      }
-      return board;
-    }
-
-        h2 {
-            color: #b30000;
-            border-left: 6px solid #b30000;
-            padding-left: 10px;
-    function setBoard(board, highlightGiven = false) {
-      const cells = [...document.querySelectorAll('.cell')];
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-          const idx = row * 9 + col;
-          const cell = cells[idx];
-          const value = board[row][col];
-          cell.value = value === 0 ? '' : String(value);
-
-          cell.classList.remove('given', 'solve');
-          if (value !== 0 && highlightGiven) {
-            cell.classList.add('given');
-          }
-        }
-      }
-    }
-
-    function isValidMove(board, row, col, num) {
-      for (let i = 0; i < 9; i++) {
-        if (board[row][i] === num) return false;
-        if (board[i][col] === num) return false;
-      }
-
-        ul {
-            list-style: none;
-            padding: 0;
-      const startRow = Math.floor(row / 3) * 3;
-      const startCol = Math.floor(col / 3) * 3;
-      for (let r = startRow; r < startRow + 3; r++) {
-        for (let c = startCol; c < startCol + 3; c++) {
-          if (board[r][c] === num) return false;
-        }
-      }
-      return true;
-    }
-
-        ul li {
-            background: #ffeaea;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border-left: 5px solid #b30000;
-    function findEmpty(board) {
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-          if (board[row][col] === 0) return [row, col];
-        }
-      }
-      return null;
-    }
-
-        .ganador {
-            background: #fff7d1;
-            border-left: 6px solid #d4af37;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.2rem;
-    function solveSudoku(board) {
-      const empty = findEmpty(board);
-      if (!empty) return true;
-
-      const [row, col] = empty;
-      for (let num = 1; num <= 9; num++) {
-        if (isValidMove(board, row, col, num)) {
-          board[row][col] = num;
-          if (solveSudoku(board)) return true;
-          board[row][col] = 0;
-        }
-      }
-      return false;
-    }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 50px;
-            background: #b30000;
-            color: white;
-    function hasConflicts(board) {
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-          const value = board[row][col];
-          if (value === 0) continue;
-          board[row][col] = 0;
-          const valid = isValidMove(board, row, col, value);
-          board[row][col] = value;
-          if (!valid) return true;
-        }
-    </style>
-</head>
-      }
-      return false;
-    }
-
-<body>
-    function showMessage(text, type = '') {
-      messageEl.textContent = text;
-      messageEl.className = `message ${type}`.trim();
-    }
-
-    <!-- SECCIÓN INICIAL -->
-    <header>
-        <h1>🎄 Panera Navideña 2025 🎁</h1>
-        <p><strong>Fecha del sorteo:</strong> 6 de enero de 2025</p>
-        <p><strong>Ganador:</strong> Aún no se ha anunciado</p>
-    </header>
-
-    <div class="container">
-
-        <!-- EXPLICACIÓN -->
-        <section>
-            <h2>¿Qué es la Panera Navideña?</h2>
-            <p>
-                La Panera Navideña es un sorteo especial que realizamos cada año para celebrar 
-                estas fiestas. Incluye una selección de productos tradicionales, dulces, bebidas 
-                y detalles perfectos para disfrutar con la familia.
-            </p>
-        </section>
-
-        <!-- LISTA DE PREMIOS -->
-        <section>
-            <h2>🎁 Premios Incluidos</h2>
-            <ul>
-                <li>Caja de turrones artesanales</li>
-                <li>Vino tinto reserva</li>
-                <li>Cava brut premium</li>
-                <li>Jamón serrano 50% raza ibérica</li>
-                <li>Bombones gourmet</li>
-                <li>Galletas navideñas decoradas</li>
-                <li>Panettone italiano</li>
-            </ul>
-        </section>
-
-        <!-- GANADOR -->
-        <section>
-            <h2>🏆 Ganador</h2>
-            <div class="ganador">
-                ⚠️ El ganador se publicará el día del sorteo.
-            </div>
-        </section>
-    document.getElementById('solveBtn').addEventListener('click', () => {
-      const board = getBoard();
-
-    </div>
-      if (hasConflicts(board)) {
-        showMessage('El tablero tiene conflictos. Revisa los números repetidos.', 'error');
-        return;
-      }
-
-      const initial = board.map((r) => [...r]);
-      const solved = solveSudoku(board);
-
-      if (!solved) {
-        showMessage('No existe solución para este Sudoku.', 'error');
-        return;
-      }
-
-      setBoard(board);
-      const cells = [...document.querySelectorAll('.cell')];
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 9; col++) {
-          const idx = row * 9 + col;
-          cells[idx].classList.add(initial[row][col] === 0 ? 'solve' : 'given');
-        }
-      }
-      showMessage('¡Sudoku resuelto!', 'success');
     });
-
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      setBoard(Array.from({ length: 9 }, () => Array(9).fill(0)));
-      showMessage('Tablero limpiado.');
-    });
-
-    <footer>
-        © 2025 Panera Navideña — ¡Felices Fiestas! 🎄
-    </footer>
-    document.getElementById('exampleBtn').addEventListener('click', () => {
-      const example = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-      ];
-      setBoard(example, true);
-      showMessage('Ejemplo cargado.');
-    });
-
-    createGrid();
   </script>
 </body>
 </html>
