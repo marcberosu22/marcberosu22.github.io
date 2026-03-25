@@ -1,223 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyMate - Student Productivity App</title>
-    <style>
-        /* ====== CSS ====== */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyMate - Student Productivity App</title>
+<style>
+/* ====== RESET Y BASE ====== */
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial,sans-serif; }
+body { background:#f5f5f5; color:#333; transition: background 0.3s, color 0.3s; }
+header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:#4a90e2; color:white; }
+button { cursor:pointer; padding:5px 10px; margin:5px; border:none; border-radius:4px; transition:0.2s; }
+button:hover { opacity:0.9; }
+main { padding:20px; display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #4a90e2;
-            color: white;
-            padding: 10px 20px;
-        }
+/* ====== TARJETAS ====== */
+.card { background:white; padding:15px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.15); transition:0.2s; }
+.card:hover { box-shadow:0 0 12px rgba(0,0,0,0.25); }
+.card h2 { margin-bottom:10px; font-size:1.2em; }
 
-        button {
-            padding: 5px 10px;
-            margin: 5px;
-            cursor: pointer;
-        }
+/* ====== LISTAS ====== */
+ul { list-style:none; padding-left:0; margin-top:10px; }
+li { padding:5px; margin:3px 0; background:#eee; border-radius:4px; display:flex; justify-content:space-between; align-items:center; }
+li.completed { text-decoration: line-through; opacity:0.6; }
 
-        main {
-            padding: 20px;
-        }
+/* ====== INPUTS ====== */
+input, textarea { width:100%; padding:5px; margin:5px 0; border-radius:4px; border:1px solid #ccc; }
+textarea { resize:none; height:50px; }
 
-        section {
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
+/* ====== TIMER ====== */
+#timerDisplay { font-size:2em; text-align:center; margin:10px 0; }
 
-        ul {
-            list-style: none;
-            padding-left: 0;
-        }
+/* ====== DARK MODE ====== */
+.dark-mode { background:#222; color:#ddd; }
+.dark-mode .card { background:#333; }
+.dark-mode input, .dark-mode textarea { background:#444; color:#ddd; border:1px solid #666; }
 
-        textarea {
-            width: 100%;
-            height: 60px;
-            margin-bottom: 5px;
-        }
+/* ====== BOTONES BORRAR ====== */
+.deleteBtn { background:#e74c3c; color:white; border-radius:50%; width:22px; height:22px; font-size:14px; line-height:22px; text-align:center; }
 
-        .dark-mode {
-            background-color: #222;
-            color: #ddd;
-        }
+/* ====== PLACEHOLDERS ====== */
+.placeholder { opacity:0.5; font-style:italic; font-size:0.9em; }
 
-        .dark-mode section {
-            background-color: #333;
-        }
-    </style>
+</style>
 </head>
 <body>
-    <header>
-        <h1>StudyMate</h1>
-        <button id="themeToggle">Toggle Dark Mode</button>
-    </header>
 
-    <main>
-        <!-- Exam Planner -->
-        <section id="examPlanner">
-            <h2>Exam Planner</h2>
-            <form id="examForm">
-                <input type="text" placeholder="Subject" id="subjectInput">
-                <input type="date" id="examDate">
-                <button type="submit">Add Exam</button>
-            </form>
-            <ul id="examList"></ul>
-        </section>
+<header>
+    <h1>StudyMate</h1>
+    <button id="themeToggle">Toggle Dark Mode</button>
+</header>
 
-        <!-- Pomodoro Timer -->
-        <section id="pomodoro">
-            <h2>Pomodoro Timer</h2>
-            <div id="timerDisplay">25:00</div>
+<main>
+    <!-- Exam Planner -->
+    <div class="card" id="examPlanner">
+        <h2>Exam Planner</h2>
+        <form id="examForm">
+            <input type="text" id="subjectInput" placeholder="Subject">
+            <input type="date" id="examDate">
+            <button type="submit">Add Exam</button>
+        </form>
+        <ul id="examList"></ul>
+    </div>
+
+    <!-- Pomodoro Timer -->
+    <div class="card" id="pomodoro">
+        <h2>Pomodoro Timer</h2>
+        <div id="timerDisplay">25:00</div>
+        <div style="display:flex; justify-content:center;">
             <button id="startTimer">Start</button>
             <button id="resetTimer">Reset</button>
-        </section>
+        </div>
+    </div>
 
-        <!-- Grade Tracker -->
-        <section id="gradeTracker">
-            <h2>Grade Tracker</h2>
-            <form id="gradeForm">
-                <input type="text" placeholder="Subject" id="gradeSubject">
-                <input type="number" placeholder="Score" id="gradeScore">
-                <button type="submit">Add Grade</button>
-            </form>
-            <ul id="gradeList"></ul>
-            <p id="averageScore">Average: 0</p>
-        </section>
+    <!-- Grade Tracker -->
+    <div class="card" id="gradeTracker">
+        <h2>Grade Tracker</h2>
+        <form id="gradeForm">
+            <input type="text" id="gradeSubject" placeholder="Subject">
+            <input type="number" id="gradeScore" placeholder="Score">
+            <button type="submit">Add Grade</button>
+        </form>
+        <ul id="gradeList"></ul>
+        <p id="averageScore">Average: 0</p>
+    </div>
 
-        <!-- Quick Notes -->
-        <section id="notes">
-            <h2>Quick Notes</h2>
-            <textarea id="noteInput" placeholder="Write something..."></textarea>
-            <button id="addNote">Add Note</button>
-            <ul id="noteList"></ul>
-        </section>
+    <!-- Quick Notes -->
+    <div class="card" id="notes">
+        <h2>Quick Notes</h2>
+        <textarea id="noteInput" placeholder="Write something..."></textarea>
+        <button id="addNote">Add Note</button>
+        <ul id="noteList"></ul>
+    </div>
 
-        <!-- Placeholder Sections for Future Features -->
-        <section id="placeholders">
-            <h2>Other Features Coming Soon</h2>
-            <ul>
-                <li>Reminders & Alerts</li>
-                <li>Calendar View</li>
-                <li>Statistics & Graphs</li>
-                <li>Task Lists / Study Lists</li>
-                <li>Mini Quiz Games</li>
-                <li>Gamification / Achievements</li>
-                <li>Cloud Backup / Offline Mode</li>
-                <li>Export / Print Plans</li>
-                <li>Social Sharing</li>
-                <li>Motivational Messages</li>
-                <li>Exam Templates</li>
-            </ul>
-        </section>
-    </main>
+    <!-- Study / Task Lists -->
+    <div class="card" id="taskList">
+        <h2>Study / Task Lists</h2>
+        <form id="taskForm">
+            <input type="text" id="taskInput" placeholder="New Task">
+            <button type="submit">Add Task</button>
+        </form>
+        <ul id="taskItems"></ul>
+    </div>
 
-    <script>
-        /* ====== JS ====== */
-        // Dark Mode Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-        });
+    <!-- Placeholders for Advanced Features -->
+    <div class="card placeholder">
+        <h2>Coming Soon</h2>
+        <ul>
+            <li>Calendar View</li>
+            <li>Gamification / Achievements</li>
+            <li>Export / Print Plans</li>
+            <li>Motivational Messages</li>
+            <li>Exam Templates</li>
+        </ul>
+    </div>
+</main>
 
-        // Exam Planner
-        const examForm = document.getElementById('examForm');
-        const examList = document.getElementById('examList');
+<script>
+// ====== DARK MODE ======
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', ()=>document.body.classList.toggle('dark-mode'));
 
-        examForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const subject = document.getElementById('subjectInput').value;
-            const date = document.getElementById('examDate').value;
-            if(subject && date){
-                const li = document.createElement('li');
-                li.textContent = `${subject} - ${date}`;
-                examList.appendChild(li);
-                examForm.reset();
-            }
-        });
+// ====== EXAM PLANNER ======
+const examForm = document.getElementById('examForm');
+const examList = document.getElementById('examList');
+examForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const subject = document.getElementById('subjectInput').value;
+    const date = document.getElementById('examDate').value;
+    if(subject && date){
+        const li = document.createElement('li');
+        li.textContent = `${subject} - ${date}`;
+        const btn = document.createElement('span');
+        btn.textContent = '×';
+        btn.className='deleteBtn';
+        btn.onclick=()=>li.remove();
+        li.appendChild(btn);
+        examList.appendChild(li);
+        localStorage.setItem('exams', examList.innerHTML);
+        examForm.reset();
+    }
+});
+examList.innerHTML = localStorage.getItem('exams')||'';
 
-        // Pomodoro Timer
-        let timer;
-        let timeLeft = 25 * 60; // 25 minutes
-        const timerDisplay = document.getElementById('timerDisplay');
-        const startTimer = document.getElementById('startTimer');
-        const resetTimer = document.getElementById('resetTimer');
+// ====== POMODORO ======
+let timer; let timeLeft=25*60;
+const timerDisplay=document.getElementById('timerDisplay');
+const startTimer=document.getElementById('startTimer');
+const resetTimer=document.getElementById('resetTimer');
+function updateTimerDisplay(){
+    let m=Math.floor(timeLeft/60), s=timeLeft%60;
+    timerDisplay.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+}
+startTimer.addEventListener('click',()=>{
+    clearInterval(timer);
+    timer=setInterval(()=>{
+        if(timeLeft>0){timeLeft--; updateTimerDisplay();}
+        else{clearInterval(timer); alert("Time's up!");}
+    },1000);
+});
+resetTimer.addEventListener('click',()=>{clearInterval(timer); timeLeft=25*60; updateTimerDisplay();});
 
-        function updateTimerDisplay() {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
-        }
+// ====== GRADE TRACKER ======
+const gradeForm=document.getElementById('gradeForm');
+const gradeList=document.getElementById('gradeList');
+const averageScore=document.getElementById('averageScore');
+let grades=[];
+gradeForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const subject=document.getElementById('gradeSubject').value;
+    const score=parseFloat(document.getElementById('gradeScore').value);
+    if(subject && !isNaN(score)){
+        const li=document.createElement('li');
+        li.textContent=`${subject}: ${score}`;
+        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
+        btn.onclick=()=>{li.remove(); updateGrades();};
+        li.appendChild(btn);
+        gradeList.appendChild(li);
+        grades.push(score);
+        updateGrades();
+        gradeForm.reset();
+    }
+});
+function updateGrades(){
+    const items = gradeList.querySelectorAll('li');
+    let total=0, count=0;
+    items.forEach(i=>{total+=parseFloat(i.textContent.split(':')[1]); count++;});
+    averageScore.textContent=`Average: ${count? (total/count).toFixed(2) : 0}`;
+}
 
-        startTimer.addEventListener('click', () => {
-            clearInterval(timer);
-            timer = setInterval(() => {
-                if(timeLeft > 0){
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    clearInterval(timer);
-                    alert("Time's up!");
-                }
-            }, 1000);
-        });
+// ====== QUICK NOTES ======
+const noteInput=document.getElementById('noteInput');
+const addNote=document.getElementById('addNote');
+const noteList=document.getElementById('noteList');
+addNote.addEventListener('click', ()=>{
+    const text=noteInput.value.trim();
+    if(text){
+        const li=document.createElement('li'); li.textContent=text;
+        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
+        btn.onclick=()=>li.remove();
+        li.appendChild(btn);
+        noteList.appendChild(li);
+        noteInput.value='';
+        localStorage.setItem('notes', noteList.innerHTML);
+    }
+});
+noteList.innerHTML = localStorage.getItem('notes')||'';
 
-        resetTimer.addEventListener('click', () => {
-            clearInterval(timer);
-            timeLeft = 25 * 60;
-            updateTimerDisplay();
-        });
+// ====== TASK LIST ======
+const taskForm=document.getElementById('taskForm');
+const taskInput=document.getElementById('taskInput');
+const taskItems=document.getElementById('taskItems');
+taskForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const text=taskInput.value.trim();
+    if(text){
+        const li=document.createElement('li'); li.textContent=text;
+        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
+        btn.onclick=()=>{li.remove(); saveTasks();};
+        li.onclick=()=>{li.classList.toggle('completed'); saveTasks();};
+        li.appendChild(btn);
+        taskItems.appendChild(li);
+        taskInput.value='';
+        saveTasks();
+    }
+});
+function saveTasks(){localStorage.setItem('tasks', taskItems.innerHTML);}
+taskItems.innerHTML = localStorage.getItem('tasks')||'';
+</script>
 
-        // Grade Tracker
-        const gradeForm = document.getElementById('gradeForm');
-        const gradeList = document.getElementById('gradeList');
-        const averageScore = document.getElementById('averageScore');
-        let grades = [];
-
-        gradeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const subject = document.getElementById('gradeSubject').value;
-            const score = parseFloat(document.getElementById('gradeScore').value);
-            if(subject && !isNaN(score)){
-                grades.push(score);
-                const li = document.createElement('li');
-                li.textContent = `${subject}: ${score}`;
-                gradeList.appendChild(li);
-                let avg = (grades.reduce((a,b)=>a+b,0)/grades.length).toFixed(2);
-                averageScore.textContent = `Average: ${avg}`;
-                gradeForm.reset();
-            }
-        });
-
-        // Quick Notes
-        const noteInput = document.getElementById('noteInput');
-        const addNote = document.getElementById('addNote');
-        const noteList = document.getElementById('noteList');
-
-        addNote.addEventListener('click', () => {
-            const text = noteInput.value;
-            if(text){
-                const li = document.createElement('li');
-                li.textContent = text;
-                noteList.appendChild(li);
-                noteInput.value = '';
-            }
-        });
-    </script>
 </body>
 </html>
