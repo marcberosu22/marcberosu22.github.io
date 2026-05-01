@@ -1,232 +1,320 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudyMate - Student Productivity App</title>
-<style>
-/* ====== RESET Y BASE ====== */
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial,sans-serif; }
-body { background:#f5f5f5; color:#333; transition: background 0.3s, color 0.3s; }
-header { display:flex; justify-content:space-between; align-items:center; padding:15px 20px; background:#4a90e2; color:white; }
-button { cursor:pointer; padding:5px 10px; margin:5px; border:none; border-radius:4px; transition:0.2s; }
-button:hover { opacity:0.9; }
-main { padding:20px; display:grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap:20px; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMate Pro - Tu Aliado Académico</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --border: #e2e8f0;
+            --radius: 12px;
+        }
 
-/* ====== TARJETAS ====== */
-.card { background:white; padding:15px; border-radius:10px; box-shadow:0 0 8px rgba(0,0,0,0.15); transition:0.2s; }
-.card:hover { box-shadow:0 0 12px rgba(0,0,0,0.25); }
-.card h2 { margin-bottom:10px; font-size:1.2em; }
+        .dark-mode {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+        }
 
-/* ====== LISTAS ====== */
-ul { list-style:none; padding-left:0; margin-top:10px; }
-li { padding:5px; margin:3px 0; background:#eee; border-radius:4px; display:flex; justify-content:space-between; align-items:center; }
-li.completed { text-decoration: line-through; opacity:0.6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-/* ====== INPUTS ====== */
-input, textarea { width:100%; padding:5px; margin:5px 0; border-radius:4px; border:1px solid #ccc; }
-textarea { resize:none; height:50px; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
 
-/* ====== TIMER ====== */
-#timerDisplay { font-size:2em; text-align:center; margin:10px 0; }
+        /* ====== HEADER ====== */
+        header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 1.5rem 2rem; background: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 100;
+        }
 
-/* ====== DARK MODE ====== */
-.dark-mode { background:#222; color:#ddd; }
-.dark-mode .card { background:#333; }
-.dark-mode input, .dark-mode textarea { background:#444; color:#ddd; border:1px solid #666; }
+        .logo { font-weight: 600; font-size: 1.5rem; color: var(--primary); display: flex; align-items: center; gap: 10px; }
 
-/* ====== BOTONES BORRAR ====== */
-.deleteBtn { background:#e74c3c; color:white; border-radius:50%; width:22px; height:22px; font-size:14px; line-height:22px; text-align:center; }
+        /* ====== LAYOUT ====== */
+        main { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+            gap: 1.5rem; padding: 2rem; max-width: 1400px; margin: 0 auto;
+        }
 
-/* ====== PLACEHOLDERS ====== */
-.placeholder { opacity:0.5; font-style:italic; font-size:0.9em; }
+        /* ====== CARDS ====== */
+        .card { 
+            background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); 
+            border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover { transform: translateY(-4px); }
+        .card h2 { font-size: 1.1rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 8px; }
 
-</style>
+        /* ====== FORMULARIOS ====== */
+        .input-group { margin-bottom: 1rem; }
+        input, textarea, select { 
+            width: 100%; padding: 0.7rem; border-radius: 8px; 
+            border: 1px solid var(--border); background: var(--bg); color: var(--text);
+            margin-top: 5px; outline: none;
+        }
+        input:focus { border-color: var(--primary); }
+
+        button { 
+            cursor: pointer; padding: 0.7rem 1.2rem; border: none; border-radius: 8px; 
+            background: var(--primary); color: white; font-weight: 600; transition: 0.2s;
+            width: 100%; margin-top: 10px;
+        }
+        button:hover { background: var(--primary-hover); }
+        button.secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+
+        /* ====== LISTAS ====== */
+        ul { list-style: none; margin-top: 1rem; }
+        li { 
+            padding: 0.8rem; background: var(--bg); border-radius: 8px; 
+            margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
+            border-left: 4px solid var(--primary);
+        }
+        .delete-btn { color: var(--danger); cursor: pointer; padding: 5px; }
+
+        /* ====== POMODORO ====== */
+        #timerDisplay { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 1rem 0; color: var(--primary); }
+        .timer-controls { display: flex; gap: 10px; }
+
+        /* ====== BADGES ====== */
+        .badge { font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; background: var(--primary); color: white; }
+
+        @media (max-width: 600px) { main { padding: 1rem; grid-template-columns: 1fr; } }
+    </style>
 </head>
 <body>
 
 <header>
-    <h1>StudyMate</h1>
-    <button id="themeToggle">Toggle Dark Mode</button>
+    <div class="logo"><i class="fas fa-graduation-cap"></i> StudyMate Pro</div>
+    <button id="themeToggle" class="secondary" style="width: auto;">
+        <i class="fas fa-moon"></i>
+    </button>
 </header>
 
 <main>
-    <!-- Exam Planner -->
-    <div class="card" id="examPlanner">
-        <h2>Exam Planner</h2>
-        <form id="examForm">
-            <input type="text" id="subjectInput" placeholder="Subject">
-            <input type="date" id="examDate">
-            <button type="submit">Add Exam</button>
-        </form>
-        <ul id="examList"></ul>
-    </div>
-
-    <!-- Pomodoro Timer -->
-    <div class="card" id="pomodoro">
-        <h2>Pomodoro Timer</h2>
+    <!-- Pomodoro -->
+    <div class="card">
+        <h2><i class="fas fa-clock"></i> Enfoque Pomodoro</h2>
+        <div id="timerLabel" style="text-align: center; color: var(--text-light);">Tiempo de Estudiar</div>
         <div id="timerDisplay">25:00</div>
-        <div style="display:flex; justify-content:center;">
-            <button id="startTimer">Start</button>
-            <button id="resetTimer">Reset</button>
+        <div class="timer-controls">
+            <button id="startTimer"><i class="fas fa-play"></i></button>
+            <button id="pauseTimer" class="secondary"><i class="fas fa-pause"></i></button>
+            <button id="resetTimer" class="secondary"><i class="fas fa-redo"></i></button>
         </div>
     </div>
 
-    <!-- Grade Tracker -->
-    <div class="card" id="gradeTracker">
-        <h2>Grade Tracker</h2>
-        <form id="gradeForm">
-            <input type="text" id="gradeSubject" placeholder="Subject">
-            <input type="number" id="gradeScore" placeholder="Score">
-            <button type="submit">Add Grade</button>
-        </form>
-        <ul id="gradeList"></ul>
-        <p id="averageScore">Average: 0</p>
-    </div>
-
-    <!-- Quick Notes -->
-    <div class="card" id="notes">
-        <h2>Quick Notes</h2>
-        <textarea id="noteInput" placeholder="Write something..."></textarea>
-        <button id="addNote">Add Note</button>
-        <ul id="noteList"></ul>
-    </div>
-
-    <!-- Study / Task Lists -->
-    <div class="card" id="taskList">
-        <h2>Study / Task Lists</h2>
-        <form id="taskForm">
-            <input type="text" id="taskInput" placeholder="New Task">
-            <button type="submit">Add Task</button>
-        </form>
+    <!-- Tareas con Prioridad -->
+    <div class="card">
+        <h2><i class="fas fa-tasks"></i> Tareas Pendientes</h2>
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="¿Qué tienes que hacer?">
+            <select id="taskPriority">
+                <option value="Baja">Prioridad Baja</option>
+                <option value="Alta">Prioridad Alta 🔥</option>
+            </select>
+            <button id="addTaskBtn">Añadir Tarea</button>
+        </div>
         <ul id="taskItems"></ul>
     </div>
 
-    <!-- Placeholders for Advanced Features -->
-    <div class="card placeholder">
-        <h2>Coming Soon</h2>
-        <ul>
-            <li>Calendar View</li>
-            <li>Gamification / Achievements</li>
-            <li>Export / Print Plans</li>
-            <li>Motivational Messages</li>
-            <li>Exam Templates</li>
-        </ul>
+    <!-- Seguimiento de Calificaciones -->
+    <div class="card">
+        <h2><i class="fas fa-chart-line"></i> Mis Notas</h2>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" id="gradeSubject" placeholder="Materia">
+            <input type="number" id="gradeScore" placeholder="Nota" step="0.1">
+        </div>
+        <button id="addGradeBtn">Registrar Nota</button>
+        <ul id="gradeList"></ul>
+        <div style="margin-top: 15px; font-weight: 600; border-top: 1px solid var(--border); padding-top: 10px;">
+            Promedio Actual: <span id="averageScore" style="color: var(--primary);">0.0</span>
+        </div>
+    </div>
+
+    <!-- Próximos Exámenes -->
+    <div class="card">
+        <h2><i class="fas fa-calendar-alt"></i> Calendario de Exámenes</h2>
+        <input type="text" id="examSubject" placeholder="Materia">
+        <input type="date" id="examDate">
+        <button id="addExamBtn">Añadir Examen</button>
+        <ul id="examList"></ul>
     </div>
 </main>
 
 <script>
-// ====== DARK MODE ======
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', ()=>document.body.classList.toggle('dark-mode'));
+    // --- UTILIDADES DE ALMACENAMIENTO ---
+    const storage = {
+        save: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+        load: (key) => JSON.parse(localStorage.getItem(key)) || []
+    };
 
-// ====== EXAM PLANNER ======
-const examForm = document.getElementById('examForm');
-const examList = document.getElementById('examList');
-examForm.addEventListener('submit', e => {
-    e.preventDefault();
-    const subject = document.getElementById('subjectInput').value;
-    const date = document.getElementById('examDate').value;
-    if(subject && date){
-        const li = document.createElement('li');
-        li.textContent = `${subject} - ${date}`;
-        const btn = document.createElement('span');
-        btn.textContent = '×';
-        btn.className='deleteBtn';
-        btn.onclick=()=>li.remove();
-        li.appendChild(btn);
-        examList.appendChild(li);
-        localStorage.setItem('exams', examList.innerHTML);
-        examForm.reset();
+    // --- DARK MODE ---
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+    });
+
+    // --- POMODORO LOGIC ---
+    let timer;
+    let timeLeft = 25 * 60;
+    let isWorking = true;
+
+    const display = document.getElementById('timerDisplay');
+    const label = document.getElementById('timerLabel');
+
+    function updateTimer() {
+        const mins = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const secs = (timeLeft % 60).toString().padStart(2, '0');
+        display.textContent = `${mins}:${secs}`;
     }
-});
-examList.innerHTML = localStorage.getItem('exams')||'';
 
-// ====== POMODORO ======
-let timer; let timeLeft=25*60;
-const timerDisplay=document.getElementById('timerDisplay');
-const startTimer=document.getElementById('startTimer');
-const resetTimer=document.getElementById('resetTimer');
-function updateTimerDisplay(){
-    let m=Math.floor(timeLeft/60), s=timeLeft%60;
-    timerDisplay.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-}
-startTimer.addEventListener('click',()=>{
-    clearInterval(timer);
-    timer=setInterval(()=>{
-        if(timeLeft>0){timeLeft--; updateTimerDisplay();}
-        else{clearInterval(timer); alert("Time's up!");}
-    },1000);
-});
-resetTimer.addEventListener('click',()=>{clearInterval(timer); timeLeft=25*60; updateTimerDisplay();});
+    document.getElementById('startTimer').onclick = () => {
+        clearInterval(timer);
+        timer = setInterval(() => {
+            if(timeLeft > 0) {
+                timeLeft--;
+                updateTimer();
+            } else {
+                clearInterval(timer);
+                isWorking = !isWorking;
+                timeLeft = isWorking ? 25 * 60 : 5 * 60;
+                label.textContent = isWorking ? "Tiempo de Estudiar" : "¡Descanso corto!";
+                alert(isWorking ? "¡A trabajar!" : "¡Tómate un respiro!");
+                updateTimer();
+            }
+        }, 1000);
+    };
 
-// ====== GRADE TRACKER ======
-const gradeForm=document.getElementById('gradeForm');
-const gradeList=document.getElementById('gradeList');
-const averageScore=document.getElementById('averageScore');
-let grades=[];
-gradeForm.addEventListener('submit', e=>{
-    e.preventDefault();
-    const subject=document.getElementById('gradeSubject').value;
-    const score=parseFloat(document.getElementById('gradeScore').value);
-    if(subject && !isNaN(score)){
-        const li=document.createElement('li');
-        li.textContent=`${subject}: ${score}`;
-        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
-        btn.onclick=()=>{li.remove(); updateGrades();};
-        li.appendChild(btn);
-        gradeList.appendChild(li);
-        grades.push(score);
-        updateGrades();
-        gradeForm.reset();
+    document.getElementById('pauseTimer').onclick = () => clearInterval(timer);
+    document.getElementById('resetTimer').onclick = () => {
+        clearInterval(timer);
+        timeLeft = 25 * 60;
+        isWorking = true;
+        label.textContent = "Tiempo de Estudiar";
+        updateTimer();
+    };
+
+    // --- TASK LOGIC ---
+    let tasks = storage.load('study_tasks');
+    function renderTasks() {
+        const list = document.getElementById('taskItems');
+        list.innerHTML = '';
+        tasks.forEach((task, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div>
+                    <span class="badge" style="background:${task.priority === 'Alta' ? 'var(--danger)' : 'var(--primary)'}">${task.priority}</span>
+                    <span style="margin-left:8px">${task.text}</span>
+                </div>
+                <i class="fas fa-trash delete-btn" onclick="deleteTask(${index})"></i>
+            `;
+            list.appendChild(li);
+        });
+        storage.save('study_tasks', tasks);
     }
-});
-function updateGrades(){
-    const items = gradeList.querySelectorAll('li');
-    let total=0, count=0;
-    items.forEach(i=>{total+=parseFloat(i.textContent.split(':')[1]); count++;});
-    averageScore.textContent=`Average: ${count? (total/count).toFixed(2) : 0}`;
-}
 
-// ====== QUICK NOTES ======
-const noteInput=document.getElementById('noteInput');
-const addNote=document.getElementById('addNote');
-const noteList=document.getElementById('noteList');
-addNote.addEventListener('click', ()=>{
-    const text=noteInput.value.trim();
-    if(text){
-        const li=document.createElement('li'); li.textContent=text;
-        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
-        btn.onclick=()=>li.remove();
-        li.appendChild(btn);
-        noteList.appendChild(li);
-        noteInput.value='';
-        localStorage.setItem('notes', noteList.innerHTML);
-    }
-});
-noteList.innerHTML = localStorage.getItem('notes')||'';
+    document.getElementById('addTaskBtn').onclick = () => {
+        const text = document.getElementById('taskInput').value;
+        const priority = document.getElementById('taskPriority').value;
+        if(text) {
+            tasks.push({text, priority});
+            document.getElementById('taskInput').value = '';
+            renderTasks();
+        }
+    };
 
-// ====== TASK LIST ======
-const taskForm=document.getElementById('taskForm');
-const taskInput=document.getElementById('taskInput');
-const taskItems=document.getElementById('taskItems');
-taskForm.addEventListener('submit', e=>{
-    e.preventDefault();
-    const text=taskInput.value.trim();
-    if(text){
-        const li=document.createElement('li'); li.textContent=text;
-        const btn=document.createElement('span'); btn.textContent='×'; btn.className='deleteBtn';
-        btn.onclick=()=>{li.remove(); saveTasks();};
-        li.onclick=()=>{li.classList.toggle('completed'); saveTasks();};
-        li.appendChild(btn);
-        taskItems.appendChild(li);
-        taskInput.value='';
-        saveTasks();
+    window.deleteTask = (index) => {
+        tasks.splice(index, 1);
+        renderTasks();
+    };
+
+    // --- GRADES LOGIC ---
+    let grades = storage.load('study_grades');
+    function renderGrades() {
+        const list = document.getElementById('gradeList');
+        list.innerHTML = '';
+        let total = 0;
+        grades.forEach((g, index) => {
+            total += parseFloat(g.score);
+            const li = document.createElement('li');
+            li.innerHTML = `<span>${g.subject}</span> <b>${g.score}</b>
+                            <i class="fas fa-times delete-btn" onclick="deleteGrade(${index})"></i>`;
+            list.appendChild(li);
+        });
+        document.getElementById('averageScore').textContent = grades.length ? (total / grades.length).toFixed(2) : "0.0";
+        storage.save('study_grades', grades);
     }
-});
-function saveTasks(){localStorage.setItem('tasks', taskItems.innerHTML);}
-taskItems.innerHTML = localStorage.getItem('tasks')||'';
+
+    document.getElementById('addGradeBtn').onclick = () => {
+        const subject = document.getElementById('gradeSubject').value;
+        const score = document.getElementById('gradeScore').value;
+        if(subject && score) {
+            grades.push({subject, score});
+            renderGrades();
+        }
+    };
+
+    window.deleteGrade = (index) => {
+        grades.splice(index, 1);
+        renderGrades();
+    };
+
+    // --- EXAM LOGIC ---
+    let exams = storage.load('study_exams');
+    function renderExams() {
+        const list = document.getElementById('examList');
+        list.innerHTML = '';
+        exams.forEach((ex, index) => {
+            const li = document.createElement('li');
+            li.style.borderLeft = "4px solid orange";
+            li.innerHTML = `<div><b>${ex.subject}</b> <br> <small>${ex.date}</small></div>
+                            <i class="fas fa-calendar-check delete-btn" onclick="deleteExam(${index})"></i>`;
+            list.appendChild(li);
+        });
+        storage.save('study_exams', exams);
+    }
+
+    document.getElementById('addExamBtn').onclick = () => {
+        const subject = document.getElementById('examSubject').value;
+        const date = document.getElementById('examDate').value;
+        if(subject && date) {
+            exams.push({subject, date});
+            renderExams();
+        }
+    };
+
+    window.deleteExam = (index) => {
+        exams.splice(index, 1);
+        renderExams();
+    };
+
+    // Inicializar vistas
+    renderTasks();
+    renderGrades();
+    renderExams();
+
 </script>
-
 </body>
 </html>
